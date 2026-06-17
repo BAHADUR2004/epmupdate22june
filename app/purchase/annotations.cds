@@ -25,7 +25,7 @@ annotate PurchasingService.PurchaseOrders with @(
       },
       {
         Value: totalAmount,
-        Label: 'Total Amount'
+        Label: 'Total PO Amount'
       },
       {
         Value: taxAmount,
