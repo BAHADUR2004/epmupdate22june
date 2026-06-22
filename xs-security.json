@@ -1,7 +1,6 @@
 {
   "xsappname": "po-management",
   "tenant-mode": "dedicated",
-
   "scopes": [
     {
       "name": "$XSAPPNAME.Read",
@@ -24,9 +23,7 @@
       "description": "Full administrative access"
     }
   ],
-
   "attributes": [],
-
   "role-templates": [
     {
       "name": "Viewer",
@@ -56,7 +53,6 @@
       ]
     }
   ],
-
   "role-collections": [
     {
       "name": "PO_ViewerRC",
