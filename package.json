@@ -1,22 +1,57 @@
 {
-  "name": "EP",
-  "version": "1.0.0",
-  "dependencies": {
-    "@sap/cds": "^9"
-  },
-  "devDependencies": {
-    "@cap-js/sqlite": "^2.4",
-    "cds-plugin-ui5": "^0.17.0"
-  },
-  "scripts": {
-    "start": "cds-serve",
-    "watch-purchase": "cds watch --open purchase/index.html?sap-ui-xx-viewCache=false --livereload false"
-  },
-  "private": true,
-  "workspaces": [
-    "app/*"
-  ],
-  "sapux": [
-    "app/purchase"
-  ]
+ "name": "epm-complete",
+ "version": "1.0.0",
+ "dependencies": {
+  "@cap-js/hana": "^2.8.0",
+  "@sap/cds": "^9.9.1",
+  "@sap/xssec": "^4.13.0"
+ },
+ "devDependencies": {
+  "@cap-js/sqlite": "^2.4",
+  "cds-plugin-ui5": "^0.17.0"
+ },
+ "scripts": {
+  "start": "cds-serve",
+  "watch-purchase": "cds watch --open purchase/index.html?sap-ui-xx-viewCache=false --livereload false"
+ },
+ "cds": {
+  "requires": {
+   "db": {
+    "kind": "sqlite"
+   },
+   "auth": {
+    "kind": "xsuaa",
+    "[development]": {
+     "kind": "mocked",
+     "users": {
+      "viewer@test.com": {
+       "password": "pass",
+       "roles": [
+        "Viewer"
+       ]
+      },
+      "manager@test.com": {
+       "password": "pass",
+       "roles": [
+        "PurchaseManager"
+       ]
+      },
+      "admin@test.com": {
+       "password": "pass",
+       "roles": [
+        "Administrator"
+       ]
+      }
+     }
+    }
+   }
+  }
+ },
+ "private": true,
+ "workspaces": [
+  "app/*"
+ ],
+ "sapux": [
+  "app/purchase"
+ ]
 }

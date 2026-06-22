@@ -1,5 +1,5 @@
 using { com.epm as db } from '../db/schema';
-
+@requires: 'authenticated-user'
 service PurchasingService @(path: '/purchasing') {
   @odata.draft.enabled
   entity PurchaseOrders as projection on db.PurchaseOrders {
