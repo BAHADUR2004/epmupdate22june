@@ -1,0 +1,94 @@
+_schema-version: "3.1"
+
+ID: epm-complete
+version: 1.0.0
+description: "CAP Project with auth"
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install
+
+modules:
+
+  # =========================
+  # CAP SERVICE ✅
+  # =========================
+  - name: epm-complete-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      memory: 256M
+      disk-quota: 512M
+    properties:
+      NODE_ENV: production
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: epm-complete-db
+      - name: epm-complete-auth   # NEW (bind to XSUAA)
+
+
+  # =========================
+  # DB DEPLOYER ✅
+  # =========================
+  - name: epm-complete-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: epm-complete-db
+
+
+  # =========================
+  # APP ROUTER ✅ (WITH AUTH)
+  # =========================
+  - name: epm-complete-approuter
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true   #  CHANGED (auth required)
+
+      - name: epm-complete-auth # NEW (bind to XSUAA)
+
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+
+
+resources:
+
+  # =========================
+  # HANA DB ✅
+  # =========================
+  - name: epm-complete-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+
+  # =========================
+  # XSUAA ✅ NEW
+  # =========================
+  - name: epm-complete-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json

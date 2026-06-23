@@ -4,16 +4,15 @@
   "routes": [
     {
       "source": "^/purchase/(.*)$",
-      "target": "/purchase/$1",
-      "destination": "srv-api",
-      "authenticationType": "none"
+      "target": "/$1",
+      "localDir": "resources",
+      "authenticationType": "xsuaa"
     },
     {
       "source": "^/purchasing/(.*)$",
       "target": "/purchasing/$1",
       "destination": "srv-api",
-      "authenticationType": "none",
-      "csrfProtection": true
+      "authenticationType": "xsuaa"
     }
   ]
 }
